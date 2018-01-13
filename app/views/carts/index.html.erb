@@ -1,0 +1,81 @@
+<p id="notice"><%= notice %></p>
+<row>
+<h1>Cart Products
+</h1>
+<h3>
+  <%= link_to 'Home', products_path %>
+  <%= link_to 'Sign out'.html_safe, destroy_user_session_path, :method => :delete, :style => "float:right"%>
+</h3>
+
+</row>
+
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<table>
+  <tr>
+      <th>Name</th>
+      <th>Size</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>action</th>
+  </tr>
+  <% session[:cart].each do |product| %>
+      <tr>
+        <td><%= product["name"] %></td>
+        <td><%= product["size"] %></td>
+        <td><%= product["price"] %></td>
+        <td><%= product["quntity"] %></td>
+        <td> 
+          <button onclick='myFunction(<%=product["id"]%>, "<%=product["name"]%>", "<%=product["size"]%>", <%=product["price"]%>, "update")'>Update</button>
+
+          <button onclick='myFunction(<%=product["id"]%>, "", "", "", "delete")'>Remove</button>
+      </tr>
+  <% end %>
+  <tr><td colspan="5"><%= button_to 'Checkout', checkout_carts_path, method: :post %></td></tr>
+</table>
+</body>
+</html>
+
+
+<script>
+function myFunction(id,name,size,price,status)
+{
+   if (status == "update"){
+    var quantity = prompt("Please enter Quantity");
+   } 
+   console.log("------------1------------",status)
+    if ((quantity != null || status == 'delete')){
+     $.ajax({
+     url : "/products/create_session",
+     type : "GET",
+     dataType: 'json',
+     data : "name=" + name + "&size=" + size + "&quantity=" + quantity + "&price=" + price + "&id=" + id + "&status=" + status,
+     success : function(data) {location.reload();}
+    });
+    }
+}
+
+</script>
+
+

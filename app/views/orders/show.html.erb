@@ -1,0 +1,60 @@
+<p id="notice"><%= notice %></p>
+<row>
+<h1>Order Histories</h1>
+<h3>
+  <%= link_to 'Home', products_path %>
+  <%= link_to 'Sign out'.html_safe, destroy_user_session_path, :method => :delete, :style => "float:right"%>
+</h3>
+</row>
+
+
+<html>
+<head>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<table>
+  <tr>
+      <th>Product Name</th>
+      <th>Size</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Total Amount</th>
+  </tr>
+  <% @order_products.each do |po| %>
+      <tr>
+        <td><%= po.product.name %></td>
+        <td><%= po.product.size %></td>
+        <td><%= po.quantity %></td>
+        <td><%= po.price %></td>
+        <td><%= (po.price * po.quantity)%></td>
+      </tr>
+  <% end %>
+  <tr>
+  	<th colspan="4">Net TOTAL</th>
+  	<th><%=@order.price%></th>
+  </tr>
+</table>
+</body>
+</html>
+
+
+
+

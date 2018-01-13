@@ -1,0 +1,88 @@
+<p id="notice"><%= notice %></p>
+<row>
+<h1>Listing Products
+</h1>
+<h3>
+<%if current_user.role_is_admin?%>
+  <%= link_to 'New Product', new_product_path %>
+<%else%>
+<%= link_to 'Order Histories', orders_path %>
+<a style="float: right; background-color: transparent;" href="/carts"><img src="/images/cart-png-file.png" height="42" width="42"></a>  
+<%end%>
+
+<%= link_to 'Sign out'.html_safe, destroy_user_session_path, :method => :delete, :style => "float:right"%>
+</h3>
+</row>
+
+
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<table>
+  <tr>
+      <th>Name</th>
+      <th>Size</th>
+      <th>Price</th>
+      <th>Action</th>
+  </tr>
+  <% @products.each do |product| %>
+      <tr>
+        <td><%= product.name %></td>
+        <td><%= product.size %></td>
+        <td><%= product.price %></td>
+        <td>
+        <%if current_user.role_is_admin?%>  
+          <%= link_to 'Show', product %>
+          <%= link_to 'Edit', edit_product_path(product) %>
+          <%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <%else%>
+          <%#= link_to 'Add'%> 
+          <button onclick='myFunction(<%=product.id%>, "<%=product.name%>", "<%=product.size%>", <%=product.price%>)'>ADD To Cart</button>
+        <%end%>
+      </tr>
+  <% end %>
+</table>
+</body>
+</html>
+
+
+<script>
+function myFunction(id,name,size,price)
+{
+   
+    var quantity = prompt("Please enter Quantity");
+    if (quantity != null){
+    $.ajax({
+    url : "/products/create_session",
+    type : "GET",
+    dataType: 'json',
+    data : "name=" + name + "&size=" + size + "&quantity=" + quantity + "&price=" + price + "&id=" + id,
+    success : function(data) {}
+    });
+  }
+
+}
+</script>
+
+
+
