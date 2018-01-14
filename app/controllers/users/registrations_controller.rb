@@ -22,6 +22,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
+  def after_sign_up_path_for(resource)
+    '/products'
+  end
+
   # DELETE /resource
   # def destroy
   #   super
